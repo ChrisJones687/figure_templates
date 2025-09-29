@@ -21,9 +21,18 @@ n <- seq(1, 31, 1)
 map_names <- paste0("probability", n)
 names(map_data2) <- map_names
 
+# Get list of possible basemaps
+get_maptypes()
+
+set_defaults(map_data2, map_service = "esri", map_type = "world_light_gray_reference")
+x <- basemap_raster(map_data2, map_service = "esri", map_type = "world_light_gray_reference")
+x_terr <- rast(x)
+
 ggplot() +
-  geom_spatraster(data = map_data2, aes(fill = probability1), alpha = 0.7) +
-  coord_sf(crs = 3857)
+  geom_spatraster_rgb(data = x_terr) +
+  geom_spatraster(data = map_data2, aes(fill = probability1), alpha = 0.7, na.rm = TRUE) +
+  coord_sf(crs = 3857) +
+  theme_void()
   # scale_fill_grass_c(palette = "celsius")
 
 
